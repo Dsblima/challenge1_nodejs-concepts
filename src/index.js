@@ -28,11 +28,11 @@ app.use(express.json());
 app.post('/users', (request, response) => {
   const {name, username} = request.body;
 
-  const userALreadyExists = users.some(
+  const userAlreadyExists = users.some(
     (user) => user.username === username
   );
 
-  if (userALreadyExists) {
+  if (userAlreadyExists) {
     return response.status(400).json({error: "The username already exists!!"});
   }
 
@@ -40,7 +40,7 @@ app.post('/users', (request, response) => {
     id:uuidv4(),
     name,
     username,
-    todos:[]
+    todos: []
   };
 
   users.push(user);
@@ -55,7 +55,20 @@ app.get('/todos', checksExistsUserAccount, (request, response) => {
 });
 
 app.post('/todos', checksExistsUserAccount, (request, response) => {
-  // Complete aqui
+  const {title, deadline} = request.body;
+  const {user} = request;
+  
+  const todo = {
+    id:uuidv4(),
+    title,
+    done:false,
+    deadline: new Date(deadline),
+    created_at: new Date()
+  }
+
+  user.todos.push(todo);
+
+  return response.status(201).json({todo: todo})
 });
 
 app.put('/todos/:id', checksExistsUserAccount, (request, response) => {
