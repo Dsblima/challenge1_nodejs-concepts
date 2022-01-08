@@ -64,23 +64,36 @@ app.post('/todos', checksExistsUserAccount, (request, response) => {
     done:false,
     deadline: new Date(deadline),
     created_at: new Date()
-  }
+  };
 
   user.todos.push(todo);
 
-  return response.status(201).json({todo: todo})
+  return response.status(201).json({todo: todo});
 });
 
 app.put('/todos/:id', checksExistsUserAccount, (request, response) => {
-  // Complete aqui
+  const {user} = request;
+  const {title, deadline} = request.body;
+  const {id} = request.query;
+
+  const todo = user.todos.find( (todo) => todo.id === id);
+
+  if (!todo) {
+    return response.status(400).json({error: "This TODO does not exist!!"})
+  }
+
+  todo.title = title;
+  todo.deadline = new Date(deadline);
+
+  return response.status(201).json({user: user});
 });
 
 app.patch('/todos/:id/done', checksExistsUserAccount, (request, response) => {
-  // Complete aqui
+  
 });
 
 app.delete('/todos/:id', checksExistsUserAccount, (request, response) => {
-  // Complete aqui
+  
 });
 
 module.exports = app;
