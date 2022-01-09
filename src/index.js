@@ -16,7 +16,7 @@ function checksExistsUserAccount(request, response, next) {
   const user = users.find((user) => user.username === username);
 
   if (!user) {
-    return response.status(400).json({error: "There is not a user with this username!!"})
+    return response.status(404).json({error: "There is not a user with this username!!"})
   }
 
   request.user = user;
@@ -28,7 +28,7 @@ function getTodo(user, id) {
   const todo = user.todos.find( (todo) => todo.id === id);
 
   if (!todo) {
-    return response.status(400).json({error: "This TODO does not exist!!"});
+    return response.status(404).json({error: "This TODO does not exist!!"});
   }
 
   return todo;
